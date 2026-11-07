@@ -28,6 +28,11 @@ export async function api<T = any>(path: string, opts: { method?: string; body?:
   return data as T;
 }
 
+/** Wakes the server (and the database) in the background, so the first sign-in of the day is faster. */
+export function warmUp() {
+  try { fetch(`${API_URL}/health`, { cache: 'no-store' }).catch(() => {}); } catch {}
+}
+
 export const fileUrl = (p: string) => (p.startsWith('http') ? p : `${API_URL}${p}`);
 
 export const naira = (n: number | string) =>
